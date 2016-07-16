@@ -1,0 +1,26 @@
+package LoonyCorn;
+
+import java.util.*;
+
+public class InfixToPostFix {
+
+	private Queue<Character> postfix;
+	private Stack<Character> infix;
+	private Map<Character, Integer> priorityMap;
+	
+	public InfixToPostFix() {
+		postfix = new Queue<Character>(Character.class);
+		infix = new Stack<Character>();
+		priorityMap = new HashMap<Character, Integer>();
+		
+	}
+	
+	
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

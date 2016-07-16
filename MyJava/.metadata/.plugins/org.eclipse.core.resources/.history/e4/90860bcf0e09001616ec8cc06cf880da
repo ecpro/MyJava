@@ -1,0 +1,88 @@
+package LoonyCorn;
+
+public class Stack {
+
+    private static long MAX_SIZE = 10000000;
+
+    private Element top;
+    private long size = 0;
+
+
+    public static void main(String[] args) throws StackOverflowException, StackUnderflowException {
+        
+    }
+
+    public void push(long data) throws StackOverflowException {
+        if (size == MAX_SIZE) {
+            throw new StackOverflowException();
+        }
+
+        Element elem = new Element(data, top);
+        top = elem;
+        size++;
+    }
+
+    public long pop() throws StackUnderflowException {
+        if (size == 0) {
+            throw new StackUnderflowException();
+        }
+        long data = top.getData();
+        top = top.getNext();
+
+        size--;
+
+        return data;
+    }
+
+    public long peek() throws StackUnderflowException {
+        if (size == 0) {
+            throw new StackUnderflowException();
+        }
+
+        return top.getData();
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public boolean isFull() {
+        return size == MAX_SIZE;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public static class Element {
+        private long data;
+        private Element next;
+
+        public long getData() {
+            return data;
+        }
+
+        public void setData(T data) {
+            this.data = data;
+        }
+
+        public Element getNext() {
+            return next;
+        }
+
+        public void setNext(Element next) {
+            this.next = next;
+        }
+
+        public Element(T data, Element next) {
+            this.data = data;
+            this.next = next;
+        }
+    }
+
+    public static class StackOverflowException extends Exception {
+    }
+
+    public static class StackUnderflowException extends Exception {
+    }
+}

@@ -1,0 +1,54 @@
+package LoonyCorn;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Task {
+	private Queue<Integer> idealQueue;
+	private Queue<Integer> inputQueue;
+	
+	public Task(String input, String ideal) throws Exception {
+		idealQueue = new Queue<Integer>(Integer.class);
+		inputQueue = new Queue<Integer>(Integer.class);
+		populateQueue(ideal, idealQueue);
+		populateQueue(input, inputQueue);
+	}
+	
+	private void populateQueue(String data, Queue<Integer> queue) throws Exception {
+		String [] inputs = data.split("\\s+");
+		for(String input : inputs) {
+			queue.enqueue(Integer.parseInt(input));
+		}
+	}
+	
+	public int scheduleAndComplete() throws Exception {
+		int timeUnit = 0;
+		
+		while(!idealQueue.isEmpty() || !inputQueue.isEmpty()) {
+			if(idealQueue.peek() == inputQueue.peek()) {
+				idealQueue.dequeue();
+				inputQueue.dequeue();
+				timeUnit++;
+			}
+			else {
+				inputQueue.enqueue(inputQueue.dequeue());
+				timeUnit++;
+			}
+		}
+		
+		return timeUnit;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int N  = Integer.parseInt(br.readLine());
+		Task task = new Task(br.readLine(), br.readLine());
+		
+		System.out.println(task.scheduleAndComplete());
+		
+
+	}
+
+}

@@ -1,0 +1,35 @@
+Retrieving file from server - Application layer
+Retrieving file from server in unintelligible manner - Session Layer
+IEEE datalink subdivision - MAC and LLC
+Graphic translations - Presentation Layer
+Encapsulation definition -  OSI used encapsulation to put PDU ( not compression or encryption) 
+Router config sources - Console Port and Virtual Terminal
+Memory component of Cisco Router - NVRAM
+Command to view previous command in router - CTRL + P
+Command for active cofig parameter - show running-config
+Prompt for EXEC in router config - #
+"IP name-server 255.255.255.255" command replaced by "IP server-name ip any"
+IP network mask commands : Router(config-if)#netmask-format{ } and IP netmask format { } 
+Layer responsible for flow control with sliding windows : Tranport layer
+TCP but not UDP use : Acknowledgements and Destination port
+Distance vector routing protocol - RIP 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ITIL process for changing tech : Capacity management
+Structural solution : CCRPM ( Change config release problem management)
+Process for correct config and tramsmission : Release management
+Cuttting down recurring incidents : presentation on imp. of Problem management
+Gradual Recovery IT service wala : answer is C ( A building telecom equip, computer staff water)
+Stock number wala (Problem management handling the error)  : ans D errors reported as incident and problem identified.
+Incident control responsibility : Restoring services following the incidents
+Which of the statements is true : Ans B Op level agree btn internal service provider in tech language
+Problem management include : Problem control error control management reporting
+Impact management not part of : Service level management
+sequence in management of service failure : incident, problem, change and release
+Change management is not responsible for : implementing the release of software change
+requesting urgent change is justified in  : correct an error on business critical systems
+Change advisory board : all of them ( problem manager, change manager and customer representative)
+Problem is : unknown cause of one or more incidents.
+
+

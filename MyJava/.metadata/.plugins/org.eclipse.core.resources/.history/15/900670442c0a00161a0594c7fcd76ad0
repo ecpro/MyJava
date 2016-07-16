@@ -1,0 +1,65 @@
+package LoonyCorn;
+
+import java.util.*;
+
+public class InfixToPostFix {
+
+	private Queue<Character> queue;
+	private Stack<Character> stack;
+	private Map<Character, Integer> priorityMap;
+	
+	public InfixToPostFix() {
+		queue = new Queue<Character>(Character.class);
+		stack = new Stack<Character>();
+		priorityMap = new HashMap<Character, Integer>();
+		
+		priorityMap.put('*', 3);
+		priorityMap.put('%', 3);
+		priorityMap.put('+', 2);
+		priorityMap.put('-', 2);
+	}
+	
+	public void convert(String input) throws Exception {
+		for(int i = 0; i<input.length(); i++) {
+			Character val = input.charAt(i);
+			if((stack.isEmpty() || stack.peek().equals('(')) && priorityMap.containsKey(val)) {
+				stack.push(val);
+			}
+			else if(val.equals(')')) {
+				while(!stack.peek().equals('(')) {
+					queue.enqueue(stack.pop());
+				}
+				stack.pop();
+			}
+			else if(priorityMap.containsKey(val)) {
+				
+				while(!stack.peek().equals('(') || !stack.isEmpty()){
+					
+					if(priorityMap.get(val) >= priorityMap.get(stack.peek())) {
+						queue.enqueue(stack.pop());
+					}
+				}
+				stack.push(val);
+				
+			}
+			else {
+				queue.enqueue(val);
+			}
+		}
+	}
+	
+	public void print() {
+		while(!queue.isEmpty()) {
+			System.out.print(queue.dequeue());
+		}
+	}
+	
+	
+	public static void main(String[] args) throws Exception {
+		
+		InfixToPostFix inf = new InfixToPostFix();
+		inf.convert("A*B-(C+D)+E");
+
+	}
+
+}

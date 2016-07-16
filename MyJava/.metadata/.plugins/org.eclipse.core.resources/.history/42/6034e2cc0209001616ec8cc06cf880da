@@ -1,0 +1,43 @@
+package LoonyCorn;
+
+public class Task {
+	private Queue<Integer> idealQueue;
+	private Queue<Integer> inputQueue;
+	
+	public Task(String ideal, String input) throws Exception {
+		populateQueue(ideal, idealQueue);
+		populateQueue(input, inputQueue);
+	}
+	
+	private void populateQueue(String data, Queue<Integer> queue) throws Exception {
+		String [] inputs = data.split("\\s+");
+		for(String input : inputs) {
+			queue.enqueue(Integer.parseInt(input));
+		}
+	}
+	
+	public int scheduleAndComplete() throws Exception {
+		int timeUnit = 0;
+		
+		while(!idealQueue.isEmpty() || !inputQueue.isEmpty()) {
+			if(idealQueue.peek() == idealQueue.peek()) {
+				idealQueue.dequeue();
+				inputQueue.dequeue();
+				timeUnit++;
+			}
+			else {
+				inputQueue.enqueue(inputQueue.dequeue());
+				timeUnit++;
+			}
+		}
+		
+		return timeUnit;
+	}
+	
+	public static void main(String[] args) {
+		
+		
+
+	}
+
+}

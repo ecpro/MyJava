@@ -1,0 +1,144 @@
+package com.recommender;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class FourthRatings {
+	private double getAverageByID(String id, int minimalRaters) {
+		int raterCount = 0;
+		double averageRating = 0.0;
+		for(Rater r : RaterDatabase.getRaters()) {
+			double rating = r.getRating(id);
+			if(rating != -1) {
+				raterCount++;
+				averageRating += rating;
+			}
+		}
+		if(raterCount < minimalRaters) return 0.0;
+		
+		return averageRating / raterCount;
+	}
+    
+    public ArrayList<Rating> getAverageRatings(int minimalRaters) {
+    	
+    	ArrayList<Rating> ratingList = new ArrayList<Rating> ();
+    	for(String m : MovieDatabase.filterBy(new TrueFilter())) {
+    		double averageRating = getAverageByID(m, minimalRaters);
+    		if(averageRating != 0.0) {
+    			ratingList.add(new Rating(m, averageRating));
+    		}
+    	}
+    	
+    	return ratingList;
+    }
+    
+public ArrayList<Rating> getAverageRatingByFilter(int minimalRaters, Filter filterCriteria) {
+		
+		ArrayList<String> selected = MovieDatabase.filterBy(filterCriteria);
+		System.out.println("Total movies selected by the filter: " + selected.size());
+		FourthRatings fr = new FourthRatings();
+		
+		ArrayList<Rating> ratings = fr.getAverageRatings(minimalRaters);
+		ArrayList<Rating> selectedRatings = new ArrayList<Rating>();
+		
+		for(Rating rating : ratings) {
+			String movieId = rating.getItem();
+			if(selected.contains(movieId)) {
+				selectedRatings.add(rating);
+			}
+		}
+		
+		return selectedRatings;
+	}
+
+	private int dotProduct(Rater me, Rater r) {
+		
+		ArrayList<String> ratedByMeList = me.getItemsRated();
+		ArrayList<String> ratedByRList = r.getItemsRated();
+		
+		ArrayList<Double> vectorMe = new ArrayList<Double>();
+		ArrayList<Double> vectorR = new ArrayList<Double>();
+
+		for(String ratedByMe: ratedByMeList) {
+			if(ratedByRList.contains(ratedByMe)) {
+				vectorMe.add(me.getRating(ratedByMe) - 5 ) ;
+				vectorR.add(r.getRating(ratedByMe) - 5); 
+				}
+		}
+		
+		double result = 0;	
+		for(int i = 0; i < vectorMe.size(); i++) {
+			double value = vectorMe.get(i) * vectorR.get(i);
+			result = result + value;
+		}
+		
+		return (int) result;
+	}
+	
+	private ArrayList<Rating> getSimilarities(String id) {
+		RaterDatabase.initialize("ratings.csv");
+		EfficientRater initialRater = (EfficientRater) RaterDatabase.getRater(id);
+		ArrayList<Rating> ratingList = new ArrayList<Rating>();
+		
+		// Here although ratingList has type as Rating but it stores raterID is item and dot product as value
+		for(Rater curr : RaterDatabase.getRaters()) {
+			if(!((EfficientRater)curr).getID().equals(initialRater.getID())) {
+				ratingList.add(new Rating(((EfficientRater)curr).getID(), dotProduct(initialRater, curr)));
+			}
+		}
+		
+		Collections.sort(ratingList, Collections.reverseOrder());
+		
+		return ratingList;
+	}
+	
+	public ArrayList<Rating> getSimilarRatings(String id, int numSimilarRaters, int minimalRaters) {
+		
+		ArrayList<Rating> finalRatingList = new ArrayList<Rating> ();
+		ArrayList<Rating> listofdesiredRaters = getSimilarities(id);
+		int len = listofdesiredRaters.size();
+		
+		for(int i = 0; i < len; i++) {
+			if(listofdesiredRaters.get(i).getValue() < 0) {
+				listofdesiredRaters.remove(i);
+				len--;
+			}
+		}
+		for(String movie : MovieDatabase.filterBy(new TrueFilter())) {
+			
+			int raterCount = 0;
+			double rating = 0;
+			double weightedRating = 0;
+			
+			if(listofdesiredRaters.size() < numSimilarRaters) break;
+			
+			for(int i = 0; i < numSimilarRaters; i++) {
+				Rating currentRaterID = listofdesiredRaters.get(i);
+				EfficientRater currentRater = (EfficientRater) RaterDatabase.getRater(currentRaterID.getItem());
+				
+				if(currentRater.hasRating(movie)) {
+					raterCount++;
+					rating = currentRater.getRating(movie);
+					weightedRating += currentRaterID.getValue() * rating;
+				}
+			}
+			
+			if(raterCount >= minimalRaters) finalRatingList.add(new Rating(movie, weightedRating/raterCount));
+		}
+		
+		Collections.sort(finalRatingList, Collections.reverseOrder());
+		return finalRatingList;
+		
+	}
+	
+	public static void main(String args []) {
+		FourthRatings fr = new FourthRatings();
+		ArrayList<Rating> raters = fr.getSimilarities("2");
+		System.out.println(raters + "\n\n");
+		
+		ArrayList<Rating> recommendations = fr.getSimilarRatings("2", 3, 2);
+		
+		System.out.println(recommendations);
+		
+	}
+}

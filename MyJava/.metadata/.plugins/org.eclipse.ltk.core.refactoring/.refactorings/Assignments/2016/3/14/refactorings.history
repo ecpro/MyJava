@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;grid&apos; in &apos;LoonyCorn.GameOfLife&apos; to &apos;initialState&apos;&#x0D;&#x0A;- Original project: &apos;Assignments&apos;&#x0D;&#x0A;- Original element: &apos;LoonyCorn.GameOfLife.grid&apos;&#x0D;&#x0A;- Renamed element: &apos;LoonyCorn.GameOfLife.initialState&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;grid&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;LoonyCorn{GameOfLife.java[GameOfLife^grid" name="initialState" references="true" setter="false" stamp="1459190052442" textual="false" version="1.0"/>
+</session>

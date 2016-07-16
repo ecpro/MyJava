@@ -1,0 +1,34 @@
+package LoonyCorn;
+
+import java.util.*;
+
+public class InfixToPostFix {
+
+	private Queue<Character> queue;
+	private Stack<Character> stack;
+	private Map<Character, Integer> priorityMap;
+	
+	public InfixToPostFix() {
+		queue = new Queue<Character>(Character.class);
+		stack = new Stack<Character>();
+		priorityMap = new HashMap<Character, Integer>();
+		
+		priorityMap.put('*', 3);
+		priorityMap.put('%', 3);
+		priorityMap.put('+', 2);
+		priorityMap.put('-', 2);
+	}
+	
+	public void convert(String input) {
+		for(int i = 0; i<input.length(); i++) {
+			if(inf)
+		}
+	}
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

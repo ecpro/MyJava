@@ -1,0 +1,147 @@
+package LoonyCorn;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+
+import LoonyCorn.Queue.QueueOverflowException;
+import LoonyCorn.Queue.QueueUnderflowException;
+
+public class Task {
+	private Queue<Integer> idealQueue;
+	private Queue<Integer> inputQueue;
+	
+	public Task(String input, String ideal) throws Exception {
+		idealQueue = new Queue<Integer>(Integer.class);
+		inputQueue = new Queue<Integer>(Integer.class);
+		populateQueue(ideal, idealQueue);
+		populateQueue(input, inputQueue);
+	}
+	
+	private void populateQueue(String data, Queue<Integer> queue) throws Exception {
+		String [] inputs = data.split("\\s+");
+		for(String input : inputs) {
+			queue.enqueue(Integer.parseInt(input));
+		}
+	}
+	
+	public int scheduleAndComplete() throws Exception {
+		int timeUnit = 0;
+		
+		while(!idealQueue.isEmpty() || !inputQueue.isEmpty()) {
+			if(idealQueue.peek() == inputQueue.peek()) {
+				idealQueue.dequeue();
+				inputQueue.dequeue();
+				timeUnit++;
+			}
+			else {
+				inputQueue.enqueue(inputQueue.dequeue());
+				timeUnit++;
+			}
+		}
+		
+		return timeUnit;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int N  = Integer.parseInt(br.readLine());
+		Task task = new Task(br.readLine(), br.readLine());
+		
+		System.out.println(task.scheduleAndComplete());
+		
+
+	}
+	
+	public class Queue<T> {
+
+	    private static final int SPECIAL_EMPTY_VALUE = -1;
+	    private static final int MAX_SIZE = 100;
+	    private T[] elements;
+
+	    private int headIndex = SPECIAL_EMPTY_VALUE;
+	    private int tailIndex = SPECIAL_EMPTY_VALUE;
+
+	    public Queue(Class<T> clazz) {
+	        this(clazz, MAX_SIZE);
+	    }
+
+	    @SuppressWarnings("unchecked")
+		public Queue(Class<T> clazz, int size) {
+	        elements = (T[]) Array.newInstance(clazz, MAX_SIZE);
+	    }
+
+	    public void enqueue(T data) throws QueueOverflowException {
+	        if (isFull()) {
+	            throw new QueueOverflowException();
+	        }
+	        tailIndex = (tailIndex + 1) % elements.length;
+	        elements[tailIndex] = data;
+
+	        // This is the first element enqueued, set the head index
+	        // to the tail index.
+	        if (headIndex == SPECIAL_EMPTY_VALUE) {
+	            headIndex = tailIndex;
+	        }
+	    }
+
+	    public boolean offer(T data) {
+	        if (isFull()) {
+	            return false;
+	        }
+	        try {
+	            enqueue(data);
+	        } catch (QueueOverflowException qoe) {
+	            
+	        }
+
+	        return true;
+	    }
+
+
+	    public T dequeue() throws QueueUnderflowException {
+	        if (isEmpty()) {
+	            throw new QueueUnderflowException();
+	        }
+
+	        T data = elements[headIndex];
+
+	        // This was the last element in the queue.
+	        if (headIndex == tailIndex) {
+	            headIndex = SPECIAL_EMPTY_VALUE;
+	        } else {
+	            headIndex = (headIndex + 1) % elements.length;
+	        }
+
+	        return data;
+	    }
+
+	    public T peek() throws QueueUnderflowException {
+	        if (isEmpty()) {
+	            throw new QueueUnderflowException();
+	        }
+
+	        return elements[headIndex];        
+	    }
+
+	    public boolean isEmpty()  {
+	        return headIndex == SPECIAL_EMPTY_VALUE;
+	    }
+
+	    public boolean isFull()  {
+	        int nextIndex = (tailIndex + 1) % elements.length;
+
+	        return nextIndex == headIndex;
+	    }
+
+	    public static class QueueOverflowException extends Exception {
+	    }
+
+	    public static class QueueUnderflowException extends Exception {
+	    }
+	}
+
+
+}
